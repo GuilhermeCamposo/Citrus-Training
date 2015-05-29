@@ -1,0 +1,4 @@
+<hello:HelloRequest
+	xmlns:hello="http://citrusframework.org/schemas/samples/HelloService">
+	<hello:Message>testing</hello:Message>
+</hello:HelloRequest>

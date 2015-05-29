@@ -1,0 +1,3 @@
+<mes:Request xmlns:mes="http://training.citrus/message">
+	<mes:Input>yeaah</mes:Input>
+</mes:Request>
