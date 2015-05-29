@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="orderManager" targetNamespace="http://training.citrus/service"
+	xmlns:order="http://training.citrus/message" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://training.citrus/service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<wsdl:types>
+		<xsd:schema xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://training.citrus/message"
+				schemaLocation="message.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+
+
+	<wsdl:message name="Request">
+		<wsdl:part element="order:Request" name="parameters" />
+	</wsdl:message>
+
+	<wsdl:message name="Response">
+		<wsdl:part element="order:Response" name="parameters" />
+	</wsdl:message>
+
+	<wsdl:portType name="TrainingCitrusService">
+		<wsdl:operation name="testSOAP">
+			<wsdl:input message="tns:Request" />
+			<wsdl:output message="tns:Response" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="TrainingCitrusServiceSOAP" type="tns:TrainingCitrusService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="testSOAP">
+			<soap:operation soapAction="http://www.citrus.training/testSOAP" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="TrainingCitrusService">
+		<wsdl:port binding="tns:TrainingCitrusServiceSOAP" name="TrainingCitrusServiceSOAP">
+			<soap:address location="http://www.citrus.training/" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

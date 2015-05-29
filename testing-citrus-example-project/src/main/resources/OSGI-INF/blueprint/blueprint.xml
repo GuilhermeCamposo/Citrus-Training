@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:camel="http://camel.apache.org/schema/blueprint"
+	xmlns:camel-cxf="http://camel.apache.org/schema/blueprint/cxf"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+       http://camel.apache.org/schema/blueprint/cxf  http://camel.apache.org/schema/cxf/camel-cxf-2.12.5-blueprint.xsd">
+
+	<bean id="RestRouteBuilder" class="testing.citrus.example.project.route.RestRouteBuilder" />
+	<bean id="JMSRouteBuilder" class="testing.citrus.example.project.route.JMSRouteBuilder" />
+	<bean id="SoapRouteBuilder" class="testing.citrus.example.project.route.SoapRouteBuilder" />
+
+	<bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="vm://localhost:61616" />
+		<property name="userName" value="admin" />
+		<property name="password" value="admin" />
+	</bean>
+
+	<bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+		init-method="start" destroy-method="stop">
+		<property name="maxConnections" value="3" />
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+	</bean>
+
+	<bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="autoStartup" value="true" />
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="pooledConnectionFactory" />
+	</bean>
+
+	<bean id="jms" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<property name="configuration" ref="jmsConfig" />
+	</bean>
+
+	<camel-cxf:cxfEndpoint id="soapEndpoint"
+		address="http://localhost:9001/trainingcitrus" serviceClass="citrus.training.service.TrainingCitrusService">
+		<camel-cxf:properties>
+			<entry key="dataFormat" value="MESSAGE" />
+		</camel-cxf:properties>
+	</camel-cxf:cxfEndpoint>
+
+	<camel-cxf:rsServer id="restService"
+		address="http://localhost:9002/TrainingCitrus/rest" serviceClass="testing.citrus.example.project.rs.RSService"
+		loggingFeatureEnabled="true" loggingSizeLimit="100" />
+
+	<camel:camelContext id="CitrusProjectCamelContext">
+		<camel:routeBuilder ref="JMSRouteBuilder" />
+		<camel:routeBuilder ref="RestRouteBuilder" />
+		<camel:routeBuilder ref="SoapRouteBuilder" />
+	</camel:camelContext>
+
+</blueprint>
