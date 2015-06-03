@@ -14,7 +14,7 @@
        http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
 
 	<!-- Common settings -->
-	<context:property-placeholder location="classpath:citrus.properties" />
+	<context:property-placeholder location="classpath:conf/citrus.properties" />
 
 	<citrus:schema-repository id="schemaRepository">
 		<citrus:schemas>

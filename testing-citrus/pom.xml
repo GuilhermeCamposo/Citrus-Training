@@ -111,30 +111,6 @@
 				</configuration>
 			</plugin>
 
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.1</version>
-				<configuration>
-					<artifacts>
-						<artifact>
-							<file>${project.build.directory}/config/${env.environment}/citrus</file>
-							<type>properties</type>
-							<classifier>properties</classifier>
-						</artifact>
-					</artifacts>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>attach-artifact</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -216,4 +192,43 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
+
+
+	<profiles>
+		<profile>
+			<activation>
+				<property>
+					<name>environment</name>
+					<value>dev</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.7</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${basedir}/target/test-classes/conf</outputDirectory>
+									<resources>
+										<resource>
+											<directory>config/dev</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
