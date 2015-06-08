@@ -5,6 +5,7 @@
 		<feature>camel-blueprint</feature>
 		<feature>camel-cxf</feature>
 		<feature>cxf</feature>
+		<bundle>mvn:org.apache.activemq/activemq-pool/5.11.1</bundle>
 		<bundle>mvn:testing.citrus/testing-citrus-example-project/1.0</bundle>
 	</feature>
 </features>
